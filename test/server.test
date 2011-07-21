@@ -1,0 +1,19 @@
+package require tcltest
+namespace import ::tcltest::*
+
+source ../server/Server.tcl
+
+test createServer {} -body {
+  set server [Server new 8080]
+  info object class $server
+} -result "::Server"
+
+test getPort {} -body {
+  $server getPort
+} -result 8080
+
+test startServer {} -body {
+  $server start
+} -result 1
+
+cleanupTests
