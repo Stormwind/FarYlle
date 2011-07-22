@@ -1,5 +1,7 @@
 package require TclOO
 
+source server/Listener.tcl
+
 oo::class create Server {
   
   constructor {serverPort} {
@@ -15,17 +17,14 @@ oo::class create Server {
   method start {} {
     my variable port
     my variable channel
-    set channel [socket -server listener $port]
+    global listener; # Hack for client server connection
+    set listener [Listener new]
+    set channel [socket -server {$listener listen} $port]
     if {$channel != ""} {
       return 1
     } else {
       return 0; # Maybe throw exception later
     }
   }
-
-  method listener {channel clientaddr clientport} {
-    puts "Hello world"
-  }
-
 
 }

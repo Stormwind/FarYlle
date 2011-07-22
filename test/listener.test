@@ -1,0 +1,15 @@
+package require tcltest
+namespace import ::tcltest::*
+
+source server/Listener.tcl
+
+test createServer {} -body {
+  set listener [Listener new]
+  info object class $listener
+} -result "::Listener"
+
+test testListen {} -body {
+  $listener listen stdout localhost 12345 
+} -output "Hello world\n"
+
+cleanupTests

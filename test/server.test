@@ -1,7 +1,7 @@
 package require tcltest
 namespace import ::tcltest::*
 
-source ../server/Server.tcl
+source server/Server.tcl
 
 test createServer {} -body {
   set server [Server new 8080]
