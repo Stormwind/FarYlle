@@ -1,0 +1,27 @@
+package require tcltest
+namespace import ::tcltest::*
+
+source logger/Logger.tcl
+
+test createLogger {} -body {
+  set logger [Logger new]
+  info object class $logger
+} -result "::Logger"
+
+test setValidLogLevel {} -body {
+  try {
+    $logger setLogLevel "warning"
+  } trap {LOG BADLEVEL} {message} {
+    puts $message
+  }
+} -result 1
+
+test createInvalidLogger {} -body {
+  try {
+    $logger setLogLevel "foobar"
+  } trap {LOG BADLEVEL} {message} {
+    puts $message
+  }
+} -output "Log level 'foobar' does not exist.\n"
+
+cleanupTests
