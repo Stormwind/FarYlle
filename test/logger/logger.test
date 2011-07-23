@@ -8,20 +8,36 @@ test createLogger {} -body {
   info object class $logger
 } -result "::Logger"
 
-test setValidLogLevel {} -body {
-  try {
-    $logger setLogLevel "warning"
-  } trap {LOG BADLEVEL} {message} {
-    puts $message
-  }
+test getAllLogLevels {} -body {
+  $logger getAllLogLevels
+} -result "error notice info debug"
+
+test getDebug {} -body {
+  $logger getDebug
+} -result 0
+
+test setDebugOn {} -body {
+    $logger setDebug 1
 } -result 1
 
-test createInvalidLogger {} -body {
+test getDebug {} -body {
+  $logger getDebug
+} -result 1
+
+test setDebugOff {} -body {
+    $logger setDebug 0
+} -result 0
+
+test setLogChannel {} -body {
+  $logger setLogChannel "info" stdout
+} -result 1
+
+test setInvalidLogChannel {} -body {
   try {
-    $logger setLogLevel "foobar"
-  } trap {LOG BADLEVEL} {message} {
-    puts $message
-  }
-} -output "Log level 'foobar' does not exist.\n"
+    $logger setLogChannel "foobar" stdout
+    } trap {LOG BADLEVEL} {message} {
+      puts $message
+    }
+} -output "Cannot set channel for log level 'foobar', because this log level does not exist.\n"
 
 cleanupTests
