@@ -1,5 +1,4 @@
 package require TclOO
-package require log
 
 # Logger logs whatever you want
 #
@@ -9,31 +8,19 @@ oo::class create Logger {
   #
   constructor {} {
     my variable logLevels
-    my setDebug 0
-    set logLevels [list "error" "notice" "info" "debug"]
+    array set logLevels {
+      "error"  stderr
+      "notice" stdout
+      "info"   stdout
+      "debug"  0
+    }
   }
 
+  # Returns all available log levels
+  #
   method getAllLogLevels {} {
     my variable logLevels
-    return [join $logLevels " "]
-  }
-
-  # Returns state of the debug logger
-  #
-  # @return Debug state
-  method getDebug {} {
-    my variable debug
-    return $debug
-  }
-
-  # Sets the debug logger on or off
-  #
-  # @param logLevel The logLevel as string
-  # @return Debug state
-  method setDebug {debugSwitch} {
-    my variable debug
-    set debug $debugSwitch
-    return $debug
+    return [join [lsort [array names logLevels]] " "]
   }
 
   # Sets the log output to the given channel
@@ -44,15 +31,36 @@ oo::class create Logger {
   # @thows LOG BADLEVEL, if log level does not exist
   method setLogChannel {logLevel channel} {
     my variable logLevels
-    if {[lsearch $logLevels $logLevel] == -1} {
+    if {[array get logLevels $logLevel] == []} {
       set message ""
       append message "Cannot set channel for log level '" $logLevel "', because this log level does not exist."
       throw {LOG BADLEVEL} $message
     } else {
+      set logLevels($logLevel) $channel
       return 1
     }
   }
 
-
+ # Logs a message to the given log level
+ #
+ # @param level
+ # @param message
+ # @return 1, if message could be logged
+ method logMessage {logLevel message} {
+   my variable logLevels
+   if {[array get logLevels $logLevel] == []} {
+      set message ""
+      append message "Cannot log message to level '" $logLevel "', because this log level does not exist."
+      throw {LOG BADLEVEL} $message
+   } else {
+     set channel $logLevels($logLevel)
+     if {$channel == 0} {
+       return 0
+     } else {
+       puts $channel $message
+       return 1
+     }
+   }
+ }
 
 }
