@@ -8,10 +8,30 @@ test createLogger {} -body {
   info object class $logger
 } -result "::Logger"
 
-test getAllLogLevels {} -body {
+test getAllLogLevelsIfNoneExists {} -body {
   $logger getAllLogLevels
-} -result "debug error info notice"
+} -result ""
 
+test addLogLevel {} -body {
+  $logger addLogLevel "info" 0
+} -result 1
+
+test addExistsingLogLevel {} -body {
+  try {
+    $logger addLogLevel "info" 0
+  } trap {LOG EXISTINGLEVEL} {message} {
+    puts $message
+  }
+} -output "Cannot add log level 'info', because it already exists.\n"
+
+test getAllLogLevels {} -body {
+  $logger addLogLevel "debug" 0
+  $logger getAllLogLevels
+} -result "debug info"
+
+#test deleteLogLevel
+#test deleteNoneExistingLogLevel
+#test getLogChannel
 
 test setLogChannel {} -body {
   $logger setLogChannel "info" stdout

@@ -8,12 +8,7 @@ oo::class create Logger {
   #
   constructor {} {
     my variable logLevels
-    array set logLevels {
-      "error"  stderr
-      "notice" stdout
-      "info"   stdout
-      "debug"  0
-    }
+    array set logLevels {}
   }
 
   # Returns all available log levels
@@ -21,6 +16,20 @@ oo::class create Logger {
   method getAllLogLevels {} {
     my variable logLevels
     return [join [lsort [array names logLevels]] " "]
+  }
+
+  # Adds log level
+  #
+  method addLogLevel {logLevel channel} {
+    my variable logLevels
+    if {[array get logLevels $logLevel] != []} {
+      set message ""
+      append message "Cannot add log level '" $logLevel "', because it already exists."
+      throw {LOG EXISTINGLEVEL} $message
+    } else {
+      set logLevels($logLevel) $channel
+      return 1
+    }
   }
 
   # Sets the log output to the given channel
