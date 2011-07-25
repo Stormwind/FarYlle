@@ -29,13 +29,21 @@ test getAllLogLevels {} -body {
   $logger getAllLogLevels
 } -result "debug info"
 
-#test deleteLogLevel
-#test deleteNoneExistingLogLevel
-#test getLogChannel
+test deleteLogLevel {} -body {
+  $logger deleteLogLevel "debug"
+} -result 1
+
+test deleteNoneExistingLogLevel {} -body {
+  $logger deleteLogLevel "debug"
+} -result 0
 
 test setLogChannel {} -body {
   $logger setLogChannel "info" stdout
 } -result 1
+
+test getLogChannel {} -body {
+  $logger getLogChannel "info"
+} -result "stdout"
 
 test setInvalidLogChannel {} -body {
   try {
@@ -44,6 +52,14 @@ test setInvalidLogChannel {} -body {
       puts $message
     }
 } -output "Cannot set channel for log level 'foobar', because this log level does not exist.\n"
+
+test getInvalidLogChannel {} -body {
+  try {
+    $logger getLogChannel "foobar"
+  } trap {LOG BADLEVEL} {message} {
+    puts $message
+  }
+} -output "Cannot return channel for log level 'foobar', because this log level does not exist.\n"
 
 test logInfo {} -body {
   $logger logMessage "info" "Info log message."

@@ -1,6 +1,6 @@
 package require TclOO
 
-# Logger logs whatever you want
+# Logger logs whatever you want, wherever you want
 #
 oo::class create Logger {
   
@@ -20,6 +20,9 @@ oo::class create Logger {
 
   # Adds log level
   #
+  # @param logLevel
+  # @param channel for output
+  # return 1 or throw exception
   method addLogLevel {logLevel channel} {
     my variable logLevels
     if {[array get logLevels $logLevel] != []} {
@@ -28,6 +31,20 @@ oo::class create Logger {
       throw {LOG EXISTINGLEVEL} $message
     } else {
       set logLevels($logLevel) $channel
+      return 1
+    }
+  }
+
+  # Delete a log level
+  #
+  # @param logLevel
+  # @return 1 or 0
+  method deleteLogLevel {logLevel} {
+    my variable logLevels
+    if {[array get logLevels $logLevel] == []} {
+      return 0
+    } else {
+      array unset logLevels $logLevel
       return 1
     }
   }
@@ -50,12 +67,28 @@ oo::class create Logger {
     }
   }
 
- # Logs a message to the given log level
- #
- # @param level
- # @param message
- # @return 1, if message could be logged
- method logMessage {logLevel message} {
+  # Returns the channel of the given log level
+  #
+  # @param logLevel
+  # @return value
+  # @throws LOG BADLEVEL, if log level does not exist
+  method getLogChannel {logLevel} {
+    my variable logLevels
+    if {[array get logLevels $logLevel] == []} {
+      set message ""
+      append message "Cannot return channel for log level '" $logLevel "', because this log level does not exist."
+      throw {LOG BADLEVEL} $message
+    } else {
+      return $logLevels($logLevel)
+    }
+  }
+
+  # Logs a message to the given log level
+  #
+  # @param level
+  # @param message
+  # @return 1, if message could be logged
+  method logMessage {logLevel message} {
    my variable logLevels
    if {[array get logLevels $logLevel] == []} {
       set message ""
@@ -70,6 +103,6 @@ oo::class create Logger {
        return 1
      }
    }
- }
+  }
 
 }
