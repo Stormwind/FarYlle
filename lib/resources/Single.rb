@@ -1,0 +1,3 @@
+
+class Single < Resource 
+end

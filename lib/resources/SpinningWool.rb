@@ -1,0 +1,3 @@
+
+class SpinningWool < Resource 
+end

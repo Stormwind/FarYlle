@@ -1,0 +1,3 @@
+
+class Product < Resource 
+end

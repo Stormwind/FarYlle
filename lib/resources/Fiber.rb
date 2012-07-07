@@ -1,0 +1,3 @@
+
+class Fiber < Resource 
+end

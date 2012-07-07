@@ -1,0 +1,3 @@
+
+class WoolBall < Resource 
+end
