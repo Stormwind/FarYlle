@@ -1,5 +1,5 @@
 # encoding: UTF-8
-require 'resources/resource'
+require 'spec_helper'
 
 class DummyResource
   include Resource
