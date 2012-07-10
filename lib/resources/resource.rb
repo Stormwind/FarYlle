@@ -1,5 +1,3 @@
-require 'dm-core'
-
 
 module Resource
     # attr_accessor :id, :description, :picture
