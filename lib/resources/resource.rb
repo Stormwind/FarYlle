@@ -1,10 +1,9 @@
+require 'dm-core'
 
-module Resources
 
-  class Resource
-
-    attr_accessor :id, :description, :picture
-    attr_reader :name, :token
+module Resource
+    # attr_accessor :id, :description, :picture
+    # attr_reader :name, :token
 
     def name=(value)
       @name = value
@@ -14,7 +13,5 @@ module Resources
       # spaces
       @token = @name.rstrip.downcase.gsub(/[ ]/, '_').gsub(/[^a-z_]*/, '')
     end
-
-  end
 
 end
