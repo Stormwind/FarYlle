@@ -2,9 +2,17 @@
 require 'spec_helper'
 
 class DummyResource
-  include Resource
-  attr_accessor :id, :description, :picture
-  attr_reader :name, :token
+    include DataMapper::Resource
+
+    property :id,          Serial
+    property :description, String
+    property :picture,     String
+    property :name,        String
+    property :token,       String
+    # attr_accessor :id, :description, :picture
+    # attr_reader :name, :token
+
+    include Resource
 end
 
 describe Resource, '#name' do

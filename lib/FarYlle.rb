@@ -39,7 +39,7 @@ end
 
 # get a certain fiber
 get '/fibers/:key' do
-  fiber = Resources::Fiber.first(:token, :key)
+  fiber = Resources::Fiber.first(:token => params[:key])
   if fiber.nil?
     status 404
     slim :resource_not_found

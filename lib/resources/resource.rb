@@ -4,12 +4,15 @@ module Resource
     # attr_reader :name, :token
 
     def name=(value)
-      @name = value
+      super
 
       # Set token here
       # The token is the name ,but lowercase, only a-z and underlines instead of
       # spaces
-      @token = @name.rstrip.downcase.gsub(/[ ]/, '_').gsub(/[^a-z_]*/, '')
+      attribute_set(
+        :token,
+        name.rstrip.downcase.gsub(/[ ]/, '_').gsub(/[^a-z_]*/, '')
+      )
     end
 
 end
