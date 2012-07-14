@@ -29,7 +29,7 @@ post '/fibers' do
   # Read name and description, to create a new fiber resource
   fiber.name = params[:name]
   fiber.description = params[:description]
-  return fiber.save
+  return fiber.save.to_json
 end
 
 # get all fibers
@@ -39,7 +39,7 @@ end
 
 # get a certain fiber
 get '/fibers/:key' do
-  fiber = Resources::Fiber.first(:token => params[:key])
+  fiber = Resources::Fiber.first(:id => params[:key])
   if fiber.nil?
     status 404
     slim :resource_not_found
