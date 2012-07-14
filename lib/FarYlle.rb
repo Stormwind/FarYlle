@@ -29,7 +29,13 @@ post '/fibers' do
   # Read name and description, to create a new fiber resource
   fiber.name = params[:name]
   fiber.description = params[:description]
-  return fiber.save.to_json
+  saved = fiber.save
+  if saved
+    status 201
+  else
+    status 409
+  end
+  saved.to_json
 end
 
 # get all fibers
