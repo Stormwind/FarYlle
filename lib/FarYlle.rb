@@ -19,6 +19,19 @@ require 'resources/fiber'
 DataMapper.auto_migrate!
 DataMapper.finalize
 
+# TODO Maybe we can put this somewhere extra, so it is not in the way
+def handle_result(resource, request, template)
+  if request.accept? 'text/html' or request.accept.empty?
+    return slim template, :locals => { :resource => resource }
+  elsif request.accept? 'application/json'
+    return resource.to_json
+  elsif request.accept? 'text/xml' or request.accept? 'application/xml'
+    return resource.to_xml
+  end
+  # TODO Throw a nice exception, because, we to not support the given accept
+  # type
+end
+
 get '/' do
   slim :index
 end
@@ -50,8 +63,6 @@ get '/fibers/:key' do
     status 404
     slim :resource_not_found
   else
-    # This is only implemented to get some readable output, will be converted in
-    # something useful later
-    fiber.to_json
+    handle_result(fiber, request, :fiber)
   end
 end

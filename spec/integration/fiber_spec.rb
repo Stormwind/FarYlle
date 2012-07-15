@@ -25,10 +25,12 @@ describe 'GET /fibers/:key' do
 
     response.status.should eq(200)
     response.body.should eq(
-      '{"id":"sheep_wool",'+
-      '"description":"Cool wool",'+
-      '"picture":null,'+
-      '"name":"Sheep wool"}'
+      '<!DOCTYPE html><html>'+
+      '<head><title>Awesome cool fiber</title></head>'+
+      '<body><h1>Sheep wool</h1><p>Cool wool</p>'+
+      '</body></html>'
     )
   end
 end
+
+# TODO write tests for different accept types
