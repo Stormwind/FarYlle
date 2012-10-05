@@ -26,18 +26,22 @@ task :integration do
 end
 
 namespace :spec do
-  spec_defaults = lambda do |spec|
-    spec.rspec_opts = ['--options', 'spec/spec.opts']
+  spec_unit_defaults = lambda do |spec|
+    spec.rspec_opts = ['--options', 'spec/spec_unit.opts']
+  end
+
+  spec_integration_defaults = lambda do |spec|
+    spec.rspec_opts = ['--options', 'spec/spec_integration.opts']
   end
 
   require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new('unit') do |task|
-    spec_defaults.call(task)
+    spec_unit_defaults.call(task)
     task.pattern = 'spec/unit/*_spec.rb'
   end
 
   RSpec::Core::RakeTask.new('integration') do |task|
-    spec_defaults.call(task)
+    spec_integration_defaults.call(task)
     task.pattern = 'spec/integration/*_spec.rb'
   end
 end
