@@ -13,7 +13,7 @@ task :integration do
   # Fork a new process to run the application
   server = fork { Sinatra::Application.run! }
 
-  # Run the inegration tests. If they fail, rescue the error.
+  # Run the integration tests. If they fail, rescue the error.
   begin
     Rake::Task[:'spec:integration'].invoke  
   rescue Exception => error
@@ -26,12 +26,18 @@ task :integration do
 end
 
 namespace :spec do
-  require 'rspec/core/rake_task'
-  RSpec::Core::RakeTask.new('unit') do |t|
-    t.pattern = 'spec/unit/*_spec.rb'
+  spec_defaults = lambda do |spec|
+    spec.rspec_opts = ['--options', 'spec/spec.opts']
   end
 
-  RSpec::Core::RakeTask.new('integration') do |t|
-    t.pattern = 'spec/integration/*_spec.rb'
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new('unit') do |task|
+    spec_defaults.call(task)
+    task.pattern = 'spec/unit/*_spec.rb'
+  end
+
+  RSpec::Core::RakeTask.new('integration') do |task|
+    spec_defaults.call(task)
+    task.pattern = 'spec/integration/*_spec.rb'
   end
 end
