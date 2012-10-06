@@ -4,6 +4,9 @@ require 'slim'
 # Fix load path
 $LOAD_PATH << File.expand_path('lib')
 
+# Load own dependencies
+require 'response'
+
 # Load datamapper
 require 'data_mapper'
 require 'json'
@@ -20,14 +23,8 @@ DataMapper.auto_migrate!
 DataMapper.finalize
 
 # TODO Maybe we can put this somewhere extra, so it is not in the way
-def handle_result(resource, request, template)
-  if request.accept? 'text/html' or request.accept.empty?
-    return slim template, :locals => { :resource => resource }
-  elsif request.accept? 'application/json'
-    return resource.to_json
-  elsif request.accept? 'text/xml' or request.accept? 'application/xml'
-    return resource.to_xml
-  end
+def create_response(resource, request)
+  Response.new(resource, request.accept)
   # TODO Throw a nice exception, because, we to not support the given accept
   # type
 end
@@ -63,6 +60,6 @@ get '/fibers/:key' do
     status 404
     slim :resource_not_found
   else
-    handle_result(fiber, request, :fiber)
+    create_response(fiber, request)
   end
 end
