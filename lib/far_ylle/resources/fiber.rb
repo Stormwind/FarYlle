@@ -1,5 +1,3 @@
-require 'resources/resource'
-
 module Resources
 
   class Fiber
@@ -12,6 +10,19 @@ module Resources
 
     # Must be included here, to be sure not to be overwritten
     include Resource
+
+    # Converts the Fiber to a Hash
+    #
+    # @return [Hash] The Fiber a Hash
+    def to_hash
+      {
+        'id'          => @id,
+        'description' => @description,
+        'picture'     => @picture,
+        'name'        => @name
+      }
+    end
+
   end
 
 end

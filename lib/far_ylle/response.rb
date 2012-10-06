@@ -30,7 +30,7 @@ class Response < Rack::Response
   end
 
   def html_response
-    template = Slim::Template.new('lib/views/fiber.slim')
+    template = Slim::Template.new('lib/far_ylle/views/fiber.slim')
     template.render(@resource)
   end
 

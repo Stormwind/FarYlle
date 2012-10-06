@@ -5,7 +5,7 @@ require 'slim'
 $LOAD_PATH << File.expand_path('lib')
 
 # Load own dependencies
-require 'response'
+require 'far_ylle/response'
 
 # Load datamapper
 require 'data_mapper'
@@ -15,8 +15,8 @@ require 'json'
 DataMapper.setup(:default, 'sqlite::memory:')
 
 # Load models
-require 'resources/resource'
-require 'resources/fiber'
+require 'far_ylle/resources/resource'
+require 'far_ylle/resources/fiber'
 
 # Create tables and finalize models
 DataMapper.auto_migrate!
@@ -58,7 +58,8 @@ get '/fibers/:key' do
   fiber = Resources::Fiber.first(:id => params[:key])
   if fiber.nil?
     status 404
-    slim :resource_not_found
+    template = Slim::Template.new('lib/far_ylle/views/resource_not_found.slim')
+    template.render(self)
   else
     create_response(fiber, request)
   end

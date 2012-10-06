@@ -1,4 +1,4 @@
 
 class Yarn < Resource 
-  attr_acessor :color
+  attr_accessor :color
 end
