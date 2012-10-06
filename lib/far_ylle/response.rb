@@ -31,7 +31,15 @@ module FarYlle
     end
 
     def html_response
-      template = Slim::Template.new('lib/far_ylle/views/fiber.slim')
+      # Gets the classname of the given resource and tranforms it into a string,
+      # then split it on the '::' and converts 'HelloWorld' in something like
+      # 'hello_world' to be able to find the view.
+      template = Slim::Template.new(
+        "lib/far_ylle/views/#{
+          @resource.class.to_s.split("::").pop.
+            gsub(/([A-Z])/, '_\1').gsub(/^[_]/, '').downcase
+        }.slim"
+      )
       template.render(@resource)
     end
 

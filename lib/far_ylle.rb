@@ -10,6 +10,7 @@ $LOAD_PATH << File.expand_path('lib')
 
 # Load own dependencies
   require 'far_ylle/response'
+  require 'far_ylle/resource_not_found'
 
   # Create a temporary sqlite table
   DataMapper.setup(:default, 'sqlite::memory:')
@@ -60,8 +61,10 @@ module FarYlle
     fiber = Resources::Fiber.first(:id => params[:key])
     if fiber.nil?
       status 404
-      template = Slim::Template.new('lib/far_ylle/views/resource_not_found.slim')
-      template.render(self)
+      # Create "not found" resource
+      not_found    = ResourceNotFound.new
+      not_found.id = params[:key]
+      Response.new(not_found, request.accept)
     else
       Response.new(fiber, request.accept)
     end

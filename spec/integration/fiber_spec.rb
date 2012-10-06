@@ -5,6 +5,11 @@ describe 'GET /fibers/:key' do
     response = Excon.get('http://127.0.0.1:4567/fibers/sheep_wool')
 
     response.status.should eq(404)
+    response.body.should eq('<!DOCTYPE html><html>'+
+      '<head><title>Not Found</title></head>'+
+      '<body><div>Not Found</div>'+
+      '</body></html>'
+    )
   end
 end
 
