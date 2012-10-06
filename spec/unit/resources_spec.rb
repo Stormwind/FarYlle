@@ -11,10 +11,10 @@ class DummyResource
     # attr_accessor :id, :description, :picture
     # attr_reader :name, :id
 
-    include Resource
+    include FarYlle::Resource
 end
 
-describe Resource, '#name' do
+describe FarYlle::Resource, '#name' do
   it 'sets the name' do
     resource = DummyResource.new
     resource.name = 'Cotton'
@@ -22,7 +22,7 @@ describe Resource, '#name' do
   end
 end
 
-describe Resource, '#name' do
+describe FarYlle::Resource, '#name' do
   it 'sets the id in lowercase' do
     resource = DummyResource.new
     resource.name = 'Cotton'
@@ -30,7 +30,7 @@ describe Resource, '#name' do
   end
 end
 
-describe Resource, '#name' do
+describe FarYlle::Resource, '#name' do
   it 'sets the id, translated whitespaces to underlines' do
     resource = DummyResource.new
     resource.name = 'Sheep wool'
@@ -38,7 +38,7 @@ describe Resource, '#name' do
   end
 end
 
-describe Resource, '#name' do
+describe FarYlle::Resource, '#name' do
   it 'sets the id and trims probably whitespaces at the end' do
     resource = DummyResource.new
     resource.name = 'whitespace wool    '
@@ -46,7 +46,7 @@ describe Resource, '#name' do
   end
 end
 
-describe Resource, '#name' do
+describe FarYlle::Resource, '#name' do
   it 'sets the id, but remove all not a-z or _ chars' do
     resource = DummyResource.new
     resource.name = 'Cööl wööl with mäny ümläüts in näme'
