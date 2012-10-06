@@ -8,7 +8,7 @@ task :spec => ['spec:unit']
 
 desc 'run all integration tests'
 task :integration do
-  require 'FarYlle'
+  require 'far_ylle'
 
   # Fork a new process to run the application
   server = fork { Sinatra::Application.run! }
